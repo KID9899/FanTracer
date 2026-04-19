@@ -1,4 +1,6 @@
 LIB_NAME = tracer
-SRCS = libmain.cpp
+SRCS = $(wildcard *.cpp)
+HDRS = $(wildcard *.h)
+HDRS += $(wildcard c_api/*.hpp)
 
 include ../Template.mk

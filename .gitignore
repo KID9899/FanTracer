@@ -6,4 +6,4 @@ workspace/cmake-build-debug/*
 
 workspace/FanTracer
 
-lib/src/*/*.o
+lib/src/**/*.o

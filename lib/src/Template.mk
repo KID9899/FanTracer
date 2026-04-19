@@ -1,12 +1,13 @@
 ifndef LIB_NAME
     $(error LIB_NAME is not defined in library Makefile!)
 endif
-ifndef SRCS
-    $(error SRCS is not defined in library Makefile!)
+ifndef HDRS
+    $(error HDRS is not defined in library Makefile!)
 endif
 
 CXX = g++
-CXXFLAGS = -fPIC -Wall -O2
+CXXFLAGS = -DLIBRARY_BUILDING -fPIC -Wall -O2 -I. -I..
+
 
 BUILD_DIR = ../../builds
 INCLUDES_DIR = ../../includes/$(LIB_NAME)
@@ -17,24 +18,39 @@ SONAME_FLAG = -Wl,-soname,lib$(LIB_NAME).$(LIB_EXT)
 
 TARGET = $(BUILD_DIR)/lib$(LIB_NAME).$(LIB_EXT)
 
-OBJS = $(SRCS:.cpp=.o)
+ifneq ($(strip $(SRCS)),)
+    OBJS = $(addsuffix .o, $(SRCS))
+    BUILD_LIB = $(TARGET)
+else
+    OBJS =
+    BUILD_LIB =
+endif
 
-all: $(TARGET) copy_headers
 
+all: $(BUILD_LIB) copy_headers
 
+ifneq ($(strip $(OBJS)),)
 $(TARGET): $(OBJS) | $(BUILD_DIR)
 	$(CXX) $(LDFLAGS) $(SONAME_FLAG) -o $@ $^
-	@echo "Library $(TARGET) was built"
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-%.o: %.cpp
+%pp.o: %pp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+endif
+
 
 copy_headers:
+ifneq ($(strip $(HDRS)),)
 	mkdir -p $(INCLUDES_DIR)
-	find . -type f \( -name '*.h' -o -name '*.hpp' -o -name '*.hh' \) -exec sh -c 'for f; do d="$(INCLUDES_DIR)/$$(dirname "$$f")"; mkdir -p "$$d"; cp "$$f" "$$d/"; done' sh {} +
+	@for f in $(HDRS); do \
+		d="$(INCLUDES_DIR)/$$(dirname "$$f")"; \
+		mkdir -p "$$d"; \
+		cp "$$f" "$$d/"; \
+	done
+endif
+
 
 clean:
 	rm -f $(OBJS) $(TARGET)
