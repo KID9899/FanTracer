@@ -2,15 +2,15 @@
 // Created by iliya on 4/19/26.
 //
 
-#include "tracer/interfaces.h"
-#include "tracer/geometry.h"
 #include <vector>
 #include <memory>
+#include "tracer/interfaces.h"
+#include "tracer/geometry.h"
 
 #ifndef TRACER_SCENE_SCENE_H
 #define TRACER_SCENE_SCENE_H
 
-
+// TODO - написать документацию
 class Scene {
 private:
     std::vector<std::shared_ptr<IShape>> shapes;

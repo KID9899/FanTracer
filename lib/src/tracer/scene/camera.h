@@ -10,6 +10,7 @@
 #ifndef TRACER_SCENE_CAMERA_H
 #define TRACER_SCENE_CAMERA_H
 
+// TODO - написать документацию
 class Camera {
 public:
     Vector3d origin;
@@ -18,7 +19,7 @@ public:
     Vector3d vertical;
 
     Ray getRay(float u, float v) const;
-    bool render(const Scene& scene, int width, int height, const std::string& filename) const;
+    bool render(const Scene& scene, int width, int height, const std::string& filename, int samples_per_pixel = 100) const;
 };
 
 

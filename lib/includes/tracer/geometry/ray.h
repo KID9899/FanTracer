@@ -8,10 +8,15 @@
 #ifndef TRACER_GEOMETRY_RAY_H
 #define TRACER_GEOMETRY_RAY_H
 
+// Простая структура луча
+// TODO - Добавить механику пакетов для SIMD
 struct Ray {
+    // Начало
     Vector3d origin;
+    // Направление
     Vector3d direction;
 
+    // Точка на расстоянии t от начала по направлению луча
     const Vector3d at(float t) const;
 };
 

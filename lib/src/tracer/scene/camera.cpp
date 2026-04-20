@@ -6,6 +6,8 @@
 #include <cmath>
 #include <iostream>
 #include <functional>
+#include <cstdlib>
+#include <ctime>
 #include "camera.h"
 
 Ray Camera::getRay(float u, float v) const {
@@ -13,13 +15,14 @@ Ray Camera::getRay(float u, float v) const {
     return {origin, dir};
 }
 
-bool Camera::render(const Scene &scene, int width, int height, const std::string &filename) const {
+// TODO - Написать комментарии, добавить поддержку актуальных методов, оптимизировать, добавить SIMD-архитектуру, механику пакетов, разобраться с отладочным выводом
+bool Camera::render(const Scene &scene, int width, int height, const std::string &filename, int samples_per_pixel) const {
     std::ofstream ppm(filename);
-    if (!ppm) {
-        return false;
-    }
+    if (!ppm) return false;
 
     ppm << "P3\n" << width << " " << height << "\n255\n";
+
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
 
     std::function<Vector3d(const Ray&, int)> trace = [&](const Ray& ray, int depth) -> Vector3d {
         if (depth <= 0) return Vector3d(0, 0, 0);
@@ -32,7 +35,7 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
             return Vector3d(0, 0, 0);
         }
 
-        Vector3d color = rec.material->emitted(rec, rec.point);
+        Vector3d color = rec.material->emitted(rec);
 
         Vector3d absorption_attenuation;
         Vector3d distortion_attenuation;
@@ -49,7 +52,6 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
 
                 if (!in_shadow) {
                     float ndotl = std::max(0.0f, rec.normal * light_dir);
-
                     color += (absorption_attenuation ^ illum) * ndotl;
                 }
             }
@@ -62,15 +64,23 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
 
     for (int j = height - 1; j >= 0; --j) {
         std::cout << "\rСканирование строк: " << (height - j) << " / " << height << std::flush;
-        for (int i = 0; i < width; ++i) {
-            float u = static_cast<float>(i) / (width - 1);
-            float v = static_cast<float>(j) / (height - 1);
 
-            Ray ray = getRay(u, v);
-            Vector3d color = trace(ray, 50);
-            int ir = static_cast<int>(255.99f * color.getX());
-            int ig = static_cast<int>(255.99f * color.getY());
-            int ib = static_cast<int>(255.99f * color.getZ());
+        for (int i = 0; i < width; ++i) {
+            Vector3d pixel_color(0, 0, 0);
+
+            for (int s = 0; s < samples_per_pixel; ++s) {
+                float u = (static_cast<float>(i) + (std::rand() / (RAND_MAX + 1.0f))) / (width - 1);
+                float v = (static_cast<float>(j) + (std::rand() / (RAND_MAX + 1.0f))) / (height - 1);
+
+                Ray ray = getRay(u, v);
+                pixel_color += trace(ray, 50);
+            }
+
+            pixel_color /= static_cast<float>(samples_per_pixel);
+
+            int ir = static_cast<int>(255.99f * pixel_color.getX());
+            int ig = static_cast<int>(255.99f * pixel_color.getY());
+            int ib = static_cast<int>(255.99f * pixel_color.getZ());
             ppm << ir << " " << ig << " " << ib << "\n";
         }
     }

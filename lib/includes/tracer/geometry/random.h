@@ -7,6 +7,7 @@
 #ifndef TRACER_GEOMETRY_RANDOM_H
 #define TRACER_GEOMETRY_RANDOM_H
 
+// Случайная точка на сфере радиуса 1
 const Vector3d randomInUnitSphere();
 
 #endif // TRACER_GEOMETRY_RANDOM_H

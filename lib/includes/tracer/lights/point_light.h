@@ -9,8 +9,11 @@
 #define TRACER_LIGHTS_POINT_LIGHT_H
 
 
+// Классический точечный источник света
 class PointLight : public ILight {
+    // Координаты источника
     const Vector3d position;
+    // Интенсивность в RGB
     const Vector3d intensity;
 public:
     PointLight(const Vector3d& position, const Vector3d& intensity);

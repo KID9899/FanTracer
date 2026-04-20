@@ -7,3 +7,4 @@
 #include "geometry/vector3d.h"
 #include "geometry/aabb.h"
 #include "geometry/random.h"
+#include "geometry/rotate.h"

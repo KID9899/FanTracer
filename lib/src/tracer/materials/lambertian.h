@@ -8,8 +8,10 @@
 #ifndef TRACER_MATERIALS_LAMBERTIAN_H
 #define TRACER_MATERIALS_LAMBERTIAN_H
 
+// Классический матовый материал
 class Lambertian : public IMaterial {
-    const Vector3d albedo;
+    // Цвет материала
+    const Vector3d color;
 public:
     Lambertian(const Vector3d& color);
 
