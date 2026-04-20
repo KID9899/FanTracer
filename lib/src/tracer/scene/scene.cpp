@@ -1,0 +1,31 @@
+//
+// Created by iliya on 4/19/26.
+//
+
+#include "scene.h"
+
+const std::vector<std::shared_ptr<IShape>> &Scene::getShapes() const { return shapes; }
+const std::vector<std::shared_ptr<ILight>> &Scene::getLights() const { return lights; }
+
+void Scene::add(std::shared_ptr<IShape> shape) {
+    shapes.push_back(std::move(shape));
+}
+
+void Scene::add(std::shared_ptr<ILight> light) {
+    lights.push_back(std::move(light));
+}
+
+bool Scene::intersect(const Ray& ray, float t_min, float t_max, HitRecord& rec) const {
+    HitRecord temp;
+    bool hit_anything = false;
+    float closest_so_far = t_max;
+
+    for (const auto& shape : shapes) {
+        if (shape->intersect(ray, t_min, closest_so_far, temp)) {
+            hit_anything = true;
+            closest_so_far = temp.t;
+            rec = temp;
+        }
+    }
+    return hit_anything;
+}

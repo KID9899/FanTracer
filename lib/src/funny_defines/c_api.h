@@ -2,7 +2,8 @@
 // Created by iliya on 4/18/26.
 //
 
-#pragma once
+#ifndef FUNNY_DEFINES_C_API_H
+#define FUNNY_DEFINES_C_API_H
 
 #ifdef LIBRARY_BUILDING
     #define IMPLEMENT(body) body
@@ -33,15 +34,17 @@
 #define make_capi(type) typedef struct chnd(type) chnd(type)
 
 #define make_cast_to(type, to) \
-ccls(to) cast_to(ccls(type) obj) IMPLEMENT({ \
+ccls(to) cast_##type##2##to(ccls(type) obj) IMPLEMENT({ \
     auto cpp = _tocpp(type, obj); \
     auto real_cast = dynamic_cast<to*>(cpp); \
     return _toc(to, real_cast) \
 })
 
 #define make_cast_from(type, from) \
-ccls(type) cast_to(ccls(from) obj) IMPLEMENT({ \
+ccls(type) cast_##from##2##type(ccls(from) obj) IMPLEMENT({ \
     auto cpp = _tocpp(from, obj); \
     auto real_cast = dynamic_cast<type*>(cpp); \
     return _toc(type, real_cast) \
 })
+
+#endif // FUNNY_DEFINES_C_API_H

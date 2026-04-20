@@ -1,6 +1,9 @@
 build
 build/*
 
+.*
+.*/*
+
 workspace/cmake-build-debug
 workspace/cmake-build-debug/*
 

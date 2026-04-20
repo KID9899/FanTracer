@@ -2,13 +2,46 @@
 // Created by iliya on 4/17/26.
 //
 #include <iostream>
-#include "tracer/c_api/vector3d.hpp"
+#include "tracer/geometry.h"
+#include "tracer/scene.h"
+#include "tracer/materials/lambertian.h"
+#include "tracer/materials/mirror.h"
+#include "tracer/materials/glass.h"
+#include "tracer/lights/point_light.h"
+#include "tracer/shapes.h"
 
 int main() {
-    ccls(Vector3d) a = Vector3d_make(1.0, 2.0, 3.0);
-    ccls(Vector3d) b = Vector3d_make(4.0, 5.0, 6.0);
+    Scene scene;
 
-    ccls(Vector3d) c = Vector3d_add_op(a, b);
+    // === Материалы ===
+    auto red    = std::make_shared<Lambertian>(Vector3d(0.8f, 0.2f, 0.2f));
+    auto mirror = std::make_shared<Mirror>(Vector3d(0.95f, 0.95f, 0.95f), 0.0f);
+    auto blue_g = std::make_shared<Glass>(Vector3d(0.5f, 0.5f, 0.8f), 1.01f, 0.5f, 0.6f);
+    auto dark_g = std::make_shared<Glass>(Vector3d(0.5f, 0.5f, 0.5f), 1.52f, 0.2f, 0.2f);
+    auto gray   = std::make_shared<Lambertian>(Vector3d(0.2f, 0.2f, 0.2f));
+    auto green  = std::make_shared<Lambertian>(Vector3d(0.2f, 0.8f, 0.2f));
 
-    printf("%f, %f, %f\n", Vector3d_getX(c), Vector3d_getY(c), Vector3d_getZ(c));
+    // Пол
+    scene.add(std::make_shared<Plane>(Vector3d(0,0,0), Vector3d(0,1,0), gray));
+
+    // Объекты
+
+
+    // Свет
+    scene.add(std::make_shared<PointLight>(Vector3d(10.0f, 10.0f, 6.0f), Vector3d(300, 300, 300)));
+
+    // Камера
+    Camera cam;
+    cam.origin = Vector3d(2.0, 1.0f, 20.0f);
+    float viewport_height = 0.5f;
+    float viewport_width = 1.0f * viewport_height;
+    cam.horizontal = Vector3d(viewport_width, 0, 0);
+    cam.vertical   = Vector3d(0, viewport_height, 0);
+    cam.lower_left_corner = cam.origin
+                            - cam.horizontal * 0.5f
+                            - cam.vertical * 0.5f
+                            - Vector3d(0, 0, 1.0f);
+
+    cam.render(scene, 300, 300, "output.ppm", 100);
+    return 0;
 }
