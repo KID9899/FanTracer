@@ -4,47 +4,58 @@
 
 #include <cmath>
 #include "cylinder.h"
+#include "tracer/geometry.h"
 
-Cylinder::Cylinder(const Vector3d& c, float r, float h, const Vector3d& rot,
-                   std::shared_ptr<IMaterial> m)
-        : center(c), radius(r), height(h), rotation(rot), mat(m) {}
+Cylinder::Cylinder(const Vector3d& c, float r, float h, const Float3& rot, const IMaterial* m)
+        : center(c), radius(r), height(h),
+              rotation(eulerRotate       (rot.x, rot.y, rot.z)),
+          inv_rotation(eulerRotateInverse(rot.x, rot.y, rot.z)),
+          mat(m) {}
 
 bool Cylinder::intersect(const Ray& ray, float t_min, float t_max, HitRecord& hit) const {
-    Vector3d local_o = eulerRotateInverse(ray.origin - center, rotation.getX(), rotation.getY(), rotation.getZ());
-    Vector3d local_d = eulerRotateInverse(ray.direction, rotation.getX(), rotation.getY(), rotation.getZ()).normalize();
+    // Переводим луч в относительный координаты (центр цилиндра в начале координат, цидиндр строго вертикально)
+    Vector3d local_o = inv_rotation^(ray.origin - center);
+    Vector3d local_d = (inv_rotation^ray.direction).normalize();
 
-    float a = local_d.getX()*local_d.getX() + local_d.getY()*local_d.getY();
-    float b = 2.0f * (local_o.getX()*local_d.getX() + local_o.getY()*local_d.getY());
-    float c = local_o.getX()*local_o.getX() + local_o.getY()*local_o.getY() - radius*radius;
+    // Проверяем, есть ли пересечения с бесконечным цилиндром нашего радиуса
+    float a = local_d.dotXY(local_d);
+    float b = 2.0f * local_o.dotXY(local_d);
+    float c = local_o.dotXY(local_o) - radius*radius;
 
     float discriminant = b*b - 4*a*c;
     if (discriminant < 0) return false;
 
+    // Если есть, то где
     float sqrt_d = std::sqrt(discriminant);
     float t1 = (-b - sqrt_d) / (2*a);
     float t2 = (-b + sqrt_d) / (2*a);
 
+    // Тут будут итоговые t, pos и normal
     float t = -1.0f;
     Vector3d local_p, local_n;
 
+    // Функция для проверки, есть ли пересечение с основанием
     auto check_wall = [&](float tt) {
         if (tt < t_min || tt > t_max) return false;
         Vector3d p = local_o + tt * local_d;
-        if (p.getZ() < 0 || p.getZ() > height) return false;
+        if ((p < 0 || p > height).z()) return false;
         t = tt;
         local_p = p;
-        local_n = Vector3d(p.getX(), p.getY(), 0).normalize();
+        local_n = p.replaceZ(0.f).normalize();
         return true;
     };
 
+    // Проверяем точки потенциального пересечения
     if (!check_wall(t1)) check_wall(t2);
 
+    // Функция для проверки пересечения с стенкой
     auto check_cap = [&](float z_cap, const Vector3d& n_cap) {
-        if (std::abs(local_d.getZ()) < 1e-8f) return false;
-        float t_cap = (z_cap - local_o.getZ()) / local_d.getZ();
+        float z = local_d.getZ();
+        if (std::abs(z) < 1e-8f) return false;
+        float t_cap = (z_cap - z) / z;
         if (t_cap < t_min || t_cap > t_max) return false;
         Vector3d p = local_o + t_cap * local_d;
-        if (p.getX()*p.getX() + p.getY()*p.getY() > radius*radius) return false;
+        if (p.dotXY(p) > radius*radius) return false;
         if (t < 0 || t_cap < t) {
             t = t_cap;
             local_p = p;
@@ -53,16 +64,19 @@ bool Cylinder::intersect(const Ray& ray, float t_min, float t_max, HitRecord& hi
         return true;
     };
 
-    check_cap(0.0f, Vector3d(0,0,-1));
-    check_cap(height, Vector3d(0,0,1));
+    // Проверяем есть ли пересечения с основаниями
+    check_cap(0.0f, Vector3d(0.f,0.f,-1.f));
+    check_cap(height, Vector3d(0.f,0.f,1.f));
 
+    // Если так ничего и не нашли
     if (t < 0) return false;
 
+    // Записываем результат
     hit.t = t;
-    hit.point = center + eulerRotate(local_p, rotation.getX(), rotation.getY(), rotation.getZ());
-    hit.normal = eulerRotate(local_n, rotation.getX(), rotation.getY(), rotation.getZ()).normalize();
-    hit.material = mat.get();
-    hit.frontFace = (ray.direction * hit.normal < 0.0f);
+    hit.point = center + (rotation ^ local_p);
+    hit.normal = (rotation ^ local_n).normalize();
+    hit.material = mat;
+    hit.frontFace = (ray.direction ^ hit.normal) < 0.0f;
     return true;
 }
 

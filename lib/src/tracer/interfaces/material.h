@@ -2,7 +2,8 @@
 // Created by iliya on 4/19/26.
 //
 
-#include "tracer/geometry.h"
+#include "tracer/core.h"
+#include "tracer/structs.h"
 
 #ifndef TRACER_INTERFACES_MATERIAL_H
 #define TRACER_INTERFACES_MATERIAL_H

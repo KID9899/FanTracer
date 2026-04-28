@@ -5,18 +5,16 @@
 #ifndef FUNNY_DEFINES_C_API_H
 #define FUNNY_DEFINES_C_API_H
 
-#ifdef LIBRARY_BUILDING
-    #define IMPLEMENT(body) body
-#else
-    #define IMPLEMENT(body) ;
-#endif
-
 #ifdef __cplusplus
     #define EXTERN_PREFIX extern "C" {
     #define EXTERN_POSTFIX };
 
     #define _toc(type, obj) reinterpret_cast<ccls(type)>(obj)
-    #define _itoc(type, obj) reinterpret_cast<ccls(type)>(new type(obj))
+    #define _tocc(type, obj) reinterpret_cast<const ccls(type)>(obj)
+    #define _itoc(type, obj) reinterpret_cast<ccls(type)>(&(obj))
+    #define _itocc(type, obj) reinterpret_cast<const ccls(type)>(&(obj))
+    #define _rvtoc(type, obj) reinterpret_cast<ccls(type)>(new type(obj))
+    #define _rvtocc(type, obj) reinterpret_cast<const ccls(type)>(new type(obj))
 
     #define _tocpp(type, obj) reinterpret_cast<type*>(obj)
     #define _tocppc(type, obj) reinterpret_cast<const type*>(obj)
@@ -28,23 +26,9 @@
 #endif
 
 
-#define chnd(type) CHandleOf##type
+#define chof(type) CHandleOf##type
 #define ccls(type) CHandleOf##type *
 
-#define make_capi(type) typedef struct chnd(type) chnd(type)
-
-#define make_cast_to(type, to) \
-ccls(to) cast_##type##2##to(ccls(type) obj) IMPLEMENT({ \
-    auto cpp = _tocpp(type, obj); \
-    auto real_cast = dynamic_cast<to*>(cpp); \
-    return _toc(to, real_cast) \
-})
-
-#define make_cast_from(type, from) \
-ccls(type) cast_##from##2##type(ccls(from) obj) IMPLEMENT({ \
-    auto cpp = _tocpp(from, obj); \
-    auto real_cast = dynamic_cast<type*>(cpp); \
-    return _toc(type, real_cast) \
-})
+#define make_capi(type) typedef struct chof(type) chof(type)
 
 #endif // FUNNY_DEFINES_C_API_H

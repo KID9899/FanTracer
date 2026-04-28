@@ -3,7 +3,8 @@
 //
 
 #include "tracer/interfaces.h"
-#include "tracer/geometry.h"
+#include "tracer/core.h"
+#include "tracer/structs.h"
 
 #ifndef TRACER_MATERIALS_MIRROR_H
 #define TRACER_MATERIALS_MIRROR_H

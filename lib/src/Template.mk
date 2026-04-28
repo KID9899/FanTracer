@@ -6,14 +6,14 @@ ifndef HDRS
 endif
 
 CXX = g++
-CXXFLAGS = -DLIBRARY_BUILDING -fPIC -Wall -O2 -I. -I..
+CXXFLAGS += -DLIBRARY_BUILDING -fPIC -Wall -O2 -I. -I..
 
 
 BUILD_DIR = ../../builds
 INCLUDES_DIR = ../../includes/$(LIB_NAME)
 
 LIB_EXT = so
-LDFLAGS = -shared
+LDFLAGS += -shared
 SONAME_FLAG = -Wl,-soname,lib$(LIB_NAME).$(LIB_EXT)
 
 TARGET = $(BUILD_DIR)/lib$(LIB_NAME).$(LIB_EXT)
@@ -27,7 +27,7 @@ else
 endif
 
 
-all: $(BUILD_LIB) copy_headers
+all: copy_headers $(BUILD_LIB)
 
 ifneq ($(strip $(OBJS)),)
 $(TARGET): $(OBJS) | $(BUILD_DIR)

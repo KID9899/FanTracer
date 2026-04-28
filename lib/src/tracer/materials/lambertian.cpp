@@ -3,6 +3,7 @@
 //
 
 #include "lambertian.h"
+#include "tracer/geometry.h"
 
 Lambertian::Lambertian(const Vector3d &color): color(color) {}
 

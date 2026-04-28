@@ -14,9 +14,5 @@ const Vector3d randomInUnitSphere() {
     float y = dist(gen);
     float z = dist(gen);
 
-    float length = std::sqrt(x*x + y*y + z*z);
-
-    if (length == 0) return Vector3d(1, 0, 0);
-
-    return Vector3d(x / length, y / length, z / length);
+    return Vector3d(x, y, z).normalize();
 }

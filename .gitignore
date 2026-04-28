@@ -8,5 +8,7 @@ workspace/cmake-build-debug
 workspace/cmake-build-debug/*
 
 workspace/FanTracer
+workspace/*.ppm
+workspace/perf*
 
 lib/src/**/*.o
