@@ -3,10 +3,7 @@
 //
 
 #include "sky_light.h"
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/lights.h"
+#include "tracer/all.h"
 
 ccls(ILight) SkyLight2ILight(ccls(SkyLight) obj) {
     auto real_cast = dynamic_cast<ILight*>(_tocpp(SkyLight, obj));

@@ -3,7 +3,7 @@
 //
 
 #include "aabb.h"
-#include "tracer/structs.h"
+#include "tracer/all.h"
 
 ccls(AABB) AABB_empty() {
     return _toc(AABB, new AABB);

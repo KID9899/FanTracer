@@ -50,9 +50,10 @@ bool Cylinder::intersect(const Ray& ray, float t_min, float t_max, HitRecord& hi
 
     // Функция для проверки пересечения с стенкой
     auto check_cap = [&](float z_cap, const Vector3d& n_cap) {
-        float z = local_d.getZ();
-        if (std::abs(z) < 1e-8f) return false;
-        float t_cap = (z_cap - z) / z;
+        float d_z = local_d.getZ();
+        float o_z = local_o.getZ();
+        if (std::abs(d_z) < 1e-8f) return false;
+        float t_cap = (z_cap - o_z) / d_z;
         if (t_cap < t_min || t_cap > t_max) return false;
         Vector3d p = local_o + t_cap * local_d;
         if (p.dotXY(p) > radius*radius) return false;

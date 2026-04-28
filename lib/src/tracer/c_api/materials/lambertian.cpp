@@ -3,10 +3,7 @@
 //
 
 #include "lambertian.h"
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/materials.h"
+#include "tracer/all.h"
 
 ccls(IMaterial) Lambertian2IMaterial(ccls(Lambertian) obj) {
     auto real_cast = dynamic_cast<IMaterial*>(_tocpp(Lambertian, obj));

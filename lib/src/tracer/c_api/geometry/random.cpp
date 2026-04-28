@@ -3,8 +3,7 @@
 //
 
 #include "random.h"
-#include "tracer/geometry.h"
-#include "tracer/core.h"
+#include "tracer/all.h"
 
 ccls(Vector3d) geometry_randomInUnitSphere() {
     return _rvtoc(Vector3d, randomInUnitSphere());

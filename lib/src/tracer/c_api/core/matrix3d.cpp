@@ -3,7 +3,7 @@
 //
 
 #include "matrix3d.h"
-#include "tracer/core.h"
+#include "tracer/all.h"
 
 ccls(Matrix3d) Matrix3d_empty() {
     return _toc(Matrix3d, new Matrix3d);

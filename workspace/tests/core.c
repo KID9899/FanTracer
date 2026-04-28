@@ -3,7 +3,7 @@
 // and checked by Iliya on 4/28/26.
 //
 
-#include "tracer/c_api/core.h"
+#include "tracer/c_api/all.h"
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
@@ -632,6 +632,6 @@ int main(void) {
     test_Vector3d();
     test_LogicalMask3d();
     test_Matrix3d();
-    printf("All tests passed!\n");
+    printf("All core tests passed!\n");
     return 0;
 }

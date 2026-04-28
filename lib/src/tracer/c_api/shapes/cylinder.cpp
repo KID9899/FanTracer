@@ -3,10 +3,7 @@
 //
 
 #include "cylinder.h"
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/shapes.h"
+#include "tracer/all.h"
 
 ccls(IShape) Cylinder2IShape(ccls(Cylinder) obj) {
     auto real_cast = dynamic_cast<IShape*>(_tocpp(Cylinder, obj));

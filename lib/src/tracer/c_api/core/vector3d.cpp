@@ -3,7 +3,7 @@
 //
 
 #include "vector3d.h"
-#include "tracer/core.h"
+#include "tracer/all.h"
 
 ccls(Vector3d) Vector3d_copy(const ccls(Vector3d) copy) {
     return _toc(Vector3d, new Vector3d(_tocppci(Vector3d, copy)));

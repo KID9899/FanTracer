@@ -3,8 +3,7 @@
 //
 
 #include "shape.h"
-#include "tracer/structs.h"
-#include "tracer/interfaces.h"
+#include "tracer/all.h"
 
 void IShape_destroy(ccls(IShape) self) {
     delete _tocpp(IShape, self);

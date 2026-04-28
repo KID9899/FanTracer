@@ -3,10 +3,7 @@
 //
 
 #include "glass.h"
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/materials.h"
+#include "tracer/all.h"
 
 ccls(IMaterial) Glass2IMaterial(ccls(Glass) obj) {
     auto real_cast = dynamic_cast<IMaterial*>(_tocpp(Glass, obj));

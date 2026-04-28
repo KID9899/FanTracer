@@ -3,7 +3,7 @@
 //
 
 #include "hit_record.h"
-#include "tracer/structs.h"
+#include "tracer/all.h"
 
 ccls(HitRecord) HitRecord_empty() {
     return _toc(HitRecord, new HitRecord);

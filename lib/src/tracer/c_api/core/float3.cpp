@@ -3,7 +3,7 @@
 //
 
 #include "float3.h"
-#include "tracer/core.h"
+#include "tracer/all.h"
 
 ccls(Float3) Float3_make(float x, float y, float z) {
     return _toc(Float3, (new Float3{x, y, z}));

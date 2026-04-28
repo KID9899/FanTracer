@@ -3,10 +3,7 @@
 //
 
 #include "plane.h"
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/shapes.h"
+#include "tracer/all.h"
 
 ccls(IShape) Plane2IShape(ccls(Plane) obj) {
     auto real_cast = dynamic_cast<IShape*>(_tocpp(Plane, obj));

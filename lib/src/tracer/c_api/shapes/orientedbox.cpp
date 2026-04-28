@@ -3,10 +3,7 @@
 //
 
 #include "orientedbox.h"
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/shapes.h"
+#include "tracer/all.h"
 
 ccls(IShape) OrientedBox2IShape(ccls(OrientedBox) obj) {
     auto real_cast = dynamic_cast<IShape*>(_tocpp(OrientedBox, obj));

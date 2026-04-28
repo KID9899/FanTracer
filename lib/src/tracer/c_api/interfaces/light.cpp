@@ -3,9 +3,7 @@
 //
 
 #include "light.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/interfaces.h"
+#include "tracer/all.h"
 
 void ILight_destroy(ccls(ILight) self) {
     delete _tocpp(ILight, self);

@@ -3,10 +3,7 @@
 //
 
 #include <string>
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/scene.h"
+#include "tracer/all.h"
 #include "camera.h"
 
 ccls(Camera) Camera_make(const ccls(Vector3d) origin, const ccls(Vector3d) view, float horizontal, float vertical, float angle) {

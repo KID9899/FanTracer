@@ -8,11 +8,11 @@ const std::vector<const IShape*> &Scene::getShapes() const { return shapes; }
 const std::vector<const ILight*> &Scene::getLights() const { return lights; }
 
 void Scene::add(const IShape* shape) {
-    shapes.push_back(std::move(shape));
+    shapes.push_back(shape);
 }
 
 void Scene::add(const ILight* light) {
-    lights.push_back(std::move(light));
+    lights.push_back(light);
 }
 
 bool Scene::intersect(const Ray& ray, float t_min, float t_max, HitRecord& hit) const {

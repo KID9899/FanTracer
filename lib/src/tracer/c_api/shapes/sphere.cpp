@@ -3,10 +3,7 @@
 //
 
 #include "sphere.h"
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/shapes.h"
+#include "tracer/all.h"
 
 ccls(IShape) Sphere2IShape(ccls(Sphere) obj) {
     auto real_cast = dynamic_cast<IShape*>(_tocpp(Sphere, obj));

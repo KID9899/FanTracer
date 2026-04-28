@@ -2,11 +2,9 @@
 // Created by iliya on 4/27/26.
 //
 
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
+#include <iostream>
+#include "tracer/all.h"
 #include "scene.h"
-#include "tracer/scene.h"
 
 ccls(Scene) Scene_empty() {
     return _toc(Scene, new Scene);
@@ -15,14 +13,14 @@ void Scene_destroy(ccls(Scene) self) {
     delete _tocpp(Scene, self);
 }
 
-int Scene_getShapes(const ccls(Scene) self, const ccls(IShape)** out) {
-    auto shapes = _tocppc(Scene, self)->getShapes();
-    *out = reinterpret_cast<const ccls(IShape)*>(shapes.data());
+int Scene_getShapes(const ccls(Scene) self, const ccls(IShape) const ** out) {
+    auto &shapes = _tocppc(Scene, self)->getShapes();
+    *out = reinterpret_cast<const ccls(IShape) const*>(shapes.data());
     return shapes.size();
 }
-int Scene_getLights(const ccls(Scene) self, const ccls(ILight)** out) {
-    auto lights = _tocppc(Scene, self)->getShapes();
-    *out = reinterpret_cast<const ccls(ILight)*>(lights.data());
+int Scene_getLights(const ccls(Scene) self, const ccls(ILight) const ** out) {
+    auto &lights = _tocppc(Scene, self)->getLights();
+    *out = reinterpret_cast<const ccls(ILight) const *>(lights.data());
     return lights.size();
 }
 

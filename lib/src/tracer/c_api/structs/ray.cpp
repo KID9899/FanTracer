@@ -3,9 +3,9 @@
 //
 
 #include "ray.h"
-#include "tracer/structs.h"
+#include "tracer/all.h"
 
-ccls(Ray) Ray_empty(const ccls(Vector3d) origin, const ccls(Vector3d) direction) {
+ccls(Ray) Ray_empty() {
     return _toc(Ray, new Ray);
 }
 ccls(Ray) Ray_make(const ccls(Vector3d) origin, const ccls(Vector3d) direction) {

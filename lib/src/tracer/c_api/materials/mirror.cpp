@@ -3,10 +3,7 @@
 //
 
 #include "mirror.h"
-#include "tracer/interfaces.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/materials.h"
+#include "tracer/all.h"
 
 ccls(IMaterial) Mirror2IMaterial(ccls(Mirror) obj) {
     auto real_cast = dynamic_cast<IMaterial*>(_tocpp(Mirror, obj));

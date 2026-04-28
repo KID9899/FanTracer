@@ -3,8 +3,7 @@
 //
 
 #include "rotate.h"
-#include "tracer/geometry.h"
-#include "tracer/core.h"
+#include "tracer/all.h"
 
 ccls(Matrix3d) geometry_rotateAroundX(float angle) {
     return _rvtoc(Matrix3d, rotateAroundX(angle));

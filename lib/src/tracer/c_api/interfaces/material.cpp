@@ -3,9 +3,7 @@
 //
 
 #include "material.h"
-#include "tracer/core.h"
-#include "tracer/structs.h"
-#include "tracer/interfaces.h"
+#include "tracer/all.h"
 
 void IMaterial_destroy(ccls(IMaterial) self) {
     delete _tocpp(IMaterial, self);

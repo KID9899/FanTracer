@@ -1,14 +1,7 @@
 //
 // Created by iliya on 4/17/26.
 //
-#include "tracer/c_api/geometry.h"
-#include "tracer/c_api/scene.h"
-#include "tracer/c_api/materials/lambertian.h"
-#include "tracer/c_api/materials/mirror.h"
-#include "tracer/c_api/materials/glass.h"
-#include "tracer/c_api/lights/point_light.h"
-#include "tracer/c_api/lights/sky_light.h"
-#include "tracer/c_api/shapes.h"
+#include "tracer/c_api/all.h"
 
 int main() {
     ccls(Scene) scene = Scene_empty();

@@ -3,7 +3,7 @@
 //
 
 #include "logicalmask3d.h"
-#include "tracer/core.h"
+#include "tracer/all.h"
 
 ccls(LogicalMask3d) LogicalMask3d_empty() {
     return _toc(LogicalMask3d, new LogicalMask3d());
