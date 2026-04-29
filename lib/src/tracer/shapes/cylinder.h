@@ -12,21 +12,21 @@
 // Простой цилиндр
 class Cylinder : public IShape {
     // Центр цилиндра
-    Vector3d center;
+    const Vector3d center;
     // Радиус основания
-    float radius;
+    const float radius;
     // Высота
-    float height;
+    const float height;
     // Матрицы поворота
-    Matrix3d rotation;
-    Matrix3d inv_rotation;
+    const Matrix3d rotation;
+    const Matrix3d inv_rotation;
     // Материал цилиндра
-    const IMaterial* mat;
+    const IMaterial *const mat;
 public:
-    Cylinder(const Vector3d& c, float r, float h, const Float3& rot, const IMaterial* m);
+    Cylinder(const Vector3d &c, float r, float h, const Float3 &rot, const IMaterial *m) noexcept;
 
-    bool intersect(const Ray& ray, float t_min, float t_max, HitRecord& hit) const override;
-    AABB getBoundingBox() const override;
+    bool intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const noexcept override;
+    AABB getBoundingBox() const noexcept override;
 };
 
 #endif // TRACER_SHAPES_CYLINDER_H

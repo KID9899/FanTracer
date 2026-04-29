@@ -29,7 +29,7 @@ void PointLight_destroy(ccls(PointLight) self) {
     delete _tocpp(PointLight, self);
 }
 
-ccls(Vector3d) PointLight_illuminate(const ccls(PointLight) self, const ccls(HitRecord) hit, ccls(Vector3d)* light_dir, float* distance) {
+ccls(Vector3d) PointLight_illuminate(const ccls(PointLight) self, const ccls(HitRecord) hit, ccls(Vector3d) *light_dir, float *distance) {
     return ILight_illuminate(const_PointLight2ILight(self), hit, light_dir, distance);
 }
 ccls(Vector3d) PointLight_samplePoint(const ccls(PointLight) self) {

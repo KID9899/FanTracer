@@ -14,7 +14,7 @@
 #include "camera.h"
 #include "tracer/geometry.h"
 
-Camera::Camera(const Vector3d &origin, const Vector3d &view, float width, float height, float angle): origin(origin){
+Camera::Camera(const Vector3d &origin, const Vector3d &view, float width, float height, float angle) noexcept: origin(origin){
     Vector3d forward = view.normalize();
     Vector3d world_up = {0.f, 1.f, 0.f};
 
@@ -35,13 +35,8 @@ Camera::Camera(const Vector3d &origin, const Vector3d &view, float width, float 
     lower_left_corner = origin + forward - horizontal * 0.5f - vertical * 0.5f;
 }
 
-Ray Camera::getRay(float u, float v) const {
-    Vector3d dir = lower_left_corner + u * horizontal + v * vertical - origin;
-    return {origin, dir};
-}
-
 // TODO - Оптимизировать, добавить механику пакетов, разобраться с отладочным выводом, добавить отражение света
-bool Camera::render(const Scene &scene, int width, int height, const std::string &filename, int samples_per_pixel, bool debug) const {
+bool Camera::render(const Scene &scene, int width, int height, const std::string &filename, int samples_per_pixel, bool debug) const noexcept {
     // Сохранять будем в формате ppm
     std::ofstream ppm(filename);
     if (!ppm) return false;
@@ -51,7 +46,7 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
 
     // lambda-функция для трассировки лучей, возвращает итоговый RGB-цвет по лучу ray
     // depth - максимальная глубина рекурсии
-    std::function<Vector3d(const Ray&, int)> trace = [&](const Ray& ray, int depth) -> Vector3d {
+    std::function<Vector3d(const Ray&, int)> trace = [&](const Ray &ray, int depth) -> Vector3d {
         if (depth <= 0) return Vector3d(0, 0, 0);
 
         HitRecord rec;
@@ -73,7 +68,7 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
 
         if (rec.material->scatter(ray, rec, absorption_attenuation, distortion_attenuation, scattered)) {
             // Обработаем каждый источник света
-            for (const auto& light_ptr : scene.getLights()) {
+            for (const auto &light_ptr : scene.getLights()) {
                 Vector3d light_dir;
                 float distance;
                 Vector3d illum = light_ptr->illuminate(rec, light_dir, distance);
@@ -134,7 +129,7 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
     // Последовательная запись файла
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
-            const Vector3d& pc = pixels[row * width + col];
+            const Vector3d &pc = pixels[row * width + col];
             int ir = static_cast<int>(255.99f * pc.getX());
             int ig = static_cast<int>(255.99f * pc.getY());
             int ib = static_cast<int>(255.99f * pc.getZ());

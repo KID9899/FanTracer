@@ -29,7 +29,7 @@ void Lambertian_destroy(ccls(Lambertian) self) {
     delete _tocpp(Lambertian, self);
 }
 
-bool Lambertian_scatter(const ccls(Lambertian) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d)* absorption_attenuation, ccls(Vector3d)* distortion_attenuation, ccls(Ray)* scattered) {
+bool Lambertian_scatter(const ccls(Lambertian) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d) *absorption_attenuation, ccls(Vector3d) *distortion_attenuation, ccls(Ray) *scattered) {
     return IMaterial_scatter(const_Lambertian2IMaterial(self), in, hit, absorption_attenuation, distortion_attenuation, scattered);
 }
 ccls(Vector3d) Lambertian_emitted(const ccls(Lambertian) self, const ccls(HitRecord) hit) {

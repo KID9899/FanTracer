@@ -20,13 +20,16 @@ class Camera {
     Vector3d horizontal;
     Vector3d vertical;
 public:
-    Camera(const Vector3d &origin, const Vector3d &view, float horizontal, float vertical, float angle = 0.f);
+    Camera(const Vector3d &origin, const Vector3d &view, float horizontal, float vertical, float angle = 0.f) noexcept;
     // Возвращает луч для пикселя по координатам [U, V] (от 0 до 1 по вертикали и горизонтали от левого нижнего угла)
-    Ray getRay(float u, float v) const;
+    inline Ray getRay(float u, float v) const noexcept  {
+        Vector3d dir = lower_left_corner + u * horizontal + v * vertical - origin;
+        return {origin, dir};
+    }
     // Отрисовать сцену scene и сохранить в файл filename (размеры итогового изображения width*height)
     // samples_per_pixel - показатель сколько вариантов лучей будет рассчитано для каждого пикселя (чем выше - тем более чётко будут отрисовываться маловероятные события, например отражение в стекле)
     // debug - выводить отладочную информацию (процесс обработки изображения по строкам)
-    bool render(const Scene& scene, int width, int height, const std::string& filename, int samples_per_pixel = 100, bool debug = false) const;
+    bool render(const Scene &scene, int width, int height, const std::string &filename, int samples_per_pixel = 100, bool debug = false) const noexcept;
 };
 
 

@@ -13,7 +13,7 @@ EXTERN_PREFIX
 make_capi(IShape);
 
 void IShape_destroy(ccls(IShape) self);
-bool IShape_intersect(const ccls(IShape) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit);
+bool IShape_intersect(const ccls(IShape) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit);
 ccls(AABB) IShape_getBoundingBox(const ccls(IShape) self);
 
 EXTERN_POSTFIX

@@ -13,13 +13,13 @@
 // просвечивания с преломлением и прямого поглощения (цвета)
 class Glass : public IMaterial {
     // Цвет материала
-    Vector3d color;
+    const Vector3d color;
     // Коэффициент преломления (прямой), например 1.52 для стекла
-    float refraction_index;
+    const float refraction_index;
     // От 0 до 1. Чем выше - тем больше доля отражаемых лучей над преломляемыми
-    float reflection_coeff;
+    const float reflection_coeff;
     // От 0 до 1. Чем выше - тем сильнее доминация прямого поглощения над искажением
-    float tint_coeff;
+    const float tint_coeff;
 
     // Примеры:
     // tint = 1 -> абсолютно непрозрачный материал с монотонным цветом (бетон в minecraft)
@@ -30,9 +30,9 @@ class Glass : public IMaterial {
     // tine = 0.2, refl = 0.2 -> обычное стекло с незначительным оттенком (бледные драгоценные камни)
     // Последний вариант очень хорошо подходит для высоких коэффициентов преломления
 public:
-    Glass(const Vector3d& color, float ri, float refl, float tint);
+    Glass(const Vector3d &color, float ri, float refl, float tint) noexcept;
 
-    bool scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_attenuation, Vector3d& distortion_attenuation, Ray& scattered) const override;
+    bool scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept override;
 };
 
 #endif // TRACER_MATERIALS_GLASS_H

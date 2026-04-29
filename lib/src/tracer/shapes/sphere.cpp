@@ -6,9 +6,9 @@
 #include "sphere.h"
 #include "tracer/geometry.h"
 
-Sphere::Sphere(const Vector3d &center, float radius, const IMaterial* mat): center(center), radius(radius), mat(mat) {}
+Sphere::Sphere(const Vector3d &center, float radius, const IMaterial *mat) noexcept: center(center), radius(radius), mat(mat) {}
 
-bool Sphere::intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const {
+bool Sphere::intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const noexcept {
     // Базовое пересечение луча со сферой
     Vector3d oc = ray.origin - center;
 
@@ -34,7 +34,7 @@ bool Sphere::intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit)
     return true;
 }
 
-AABB Sphere::getBoundingBox() const {
+AABB Sphere::getBoundingBox() const noexcept {
     Vector3d r(radius, radius, radius);
     return {center - r, center + r};
 }

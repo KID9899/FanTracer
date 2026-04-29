@@ -29,7 +29,7 @@ void OrientedBox_destroy(ccls(OrientedBox) self) {
     delete _tocpp(OrientedBox, self);
 }
 
-bool OrientedBox_intersect(const ccls(OrientedBox) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit) {
+bool OrientedBox_intersect(const ccls(OrientedBox) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit) {
     return IShape_intersect(const_OrientedBox2IShape(self), ray, t_min, t_max, hit);
 }
 ccls(AABB) OrientedBox_getBoundingBox(const ccls(OrientedBox) self) {

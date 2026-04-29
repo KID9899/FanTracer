@@ -15,14 +15,14 @@ private:
     // Центр сферы
     const Vector3d center;
     // Радиус сферы
-    float radius;
+    const float radius;
     // Материал
-    const IMaterial* mat;
+    const IMaterial *const mat;
 public:
-    Sphere(const Vector3d &center, float radius, const IMaterial* mat);
+    Sphere(const Vector3d &center, float radius, const IMaterial *mat) noexcept;
 
-    bool intersect(const Ray& ray, float t_min, float t_max, HitRecord& hit) const override;
-    virtual AABB getBoundingBox() const override;
+    bool intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const noexcept override;
+    virtual AABB getBoundingBox() const noexcept override;
 };
 
 #endif // TRACER_SHAPES_SPHERE_H

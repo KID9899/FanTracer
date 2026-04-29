@@ -19,7 +19,7 @@ const ccls(Mirror) const_IMaterial2Mirror(const ccls(IMaterial) obj);
 
 ccls(Mirror) Mirror_make(const ccls(Vector3d) albedo, float fuzz);
 void Mirror_destroy(ccls(Mirror) self);
-bool Mirror_scatter(const ccls(Mirror) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d)* absorption_attenuation, ccls(Vector3d)* distortion_attenuation, ccls(Ray)* scattered);
+bool Mirror_scatter(const ccls(Mirror) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d) *absorption_attenuation, ccls(Vector3d) *distortion_attenuation, ccls(Ray) *scattered);
 ccls(Vector3d) Mirror_emitted(const ccls(Mirror) self, const ccls(HitRecord) hit);
 
 EXTERN_POSTFIX

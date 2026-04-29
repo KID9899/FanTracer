@@ -19,7 +19,7 @@ const ccls(OrientedBox) const_IShape2OrientedBox(const ccls(IShape) obj);
 
 ccls(OrientedBox) OrientedBox_make(const ccls(Vector3d) center, const ccls(Vector3d) size, const ccls(Float3) rot, const ccls(IMaterial) material);
 void OrientedBox_destroy(ccls(OrientedBox) self);
-bool OrientedBox_intersect(const ccls(OrientedBox) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit);
+bool OrientedBox_intersect(const ccls(OrientedBox) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit);
 ccls(AABB) OrientedBox_getBoundingBox(const ccls(OrientedBox) self);
 
 EXTERN_POSTFIX

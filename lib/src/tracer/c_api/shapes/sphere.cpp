@@ -29,7 +29,7 @@ void Sphere_destroy(ccls(Sphere) self) {
     delete _tocpp(Sphere, self);
 }
 
-bool Sphere_intersect(const ccls(Sphere) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit) {
+bool Sphere_intersect(const ccls(Sphere) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit) {
     return IShape_intersect(const_Sphere2IShape(self), ray, t_min, t_max, hit);
 }
 ccls(AABB) Sphere_getBoundingBox(const ccls(Sphere) self) {

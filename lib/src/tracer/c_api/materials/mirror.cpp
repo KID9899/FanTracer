@@ -29,7 +29,7 @@ void Mirror_destroy(ccls(Mirror) self) {
     delete _tocpp(Mirror, self);
 }
 
-bool Mirror_scatter(const ccls(Mirror) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d)* absorption_attenuation, ccls(Vector3d)* distortion_attenuation, ccls(Ray)* scattered) {
+bool Mirror_scatter(const ccls(Mirror) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d) *absorption_attenuation, ccls(Vector3d) *distortion_attenuation, ccls(Ray) *scattered) {
     return IMaterial_scatter(const_Mirror2IMaterial(self), in, hit, absorption_attenuation, distortion_attenuation, scattered);
 }
 ccls(Vector3d) Mirror_emitted(const ccls(Mirror) self, const ccls(HitRecord) hit) {

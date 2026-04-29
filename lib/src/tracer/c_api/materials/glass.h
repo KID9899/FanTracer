@@ -19,7 +19,7 @@ const ccls(Glass) const_IMaterial2Glass(const ccls(IMaterial) obj);
 
 ccls(Glass) Glass_make(const ccls(Vector3d) color, float refraction_index, float reflection_coeff, float tint_coeff);
 void Glass_destroy(ccls(Glass) self);
-bool Glass_scatter(const ccls(Glass) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d)* absorption_attenuation, ccls(Vector3d)* distortion_attenuation, ccls(Ray)* scattered);
+bool Glass_scatter(const ccls(Glass) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d) *absorption_attenuation, ccls(Vector3d) *distortion_attenuation, ccls(Ray) *scattered);
 ccls(Vector3d) Glass_emitted(const ccls(Glass) self, const ccls(HitRecord) hit);
 
 EXTERN_POSTFIX

@@ -19,7 +19,7 @@ const ccls(PointLight) const_ILight2PointLight(const ccls(ILight) obj);
 
 ccls(PointLight) PointLight_make(const ccls(Vector3d) position, const ccls(Vector3d) intensity);
 void PointLight_destroy(ccls(PointLight) self);
-ccls(Vector3d) PointLight_illuminate(const ccls(PointLight) self, const ccls(HitRecord) hit, ccls(Vector3d)* light_dir, float* distance);
+ccls(Vector3d) PointLight_illuminate(const ccls(PointLight) self, const ccls(HitRecord) hit, ccls(Vector3d) *light_dir, float *distance);
 ccls(Vector3d) PointLight_samplePoint(const ccls(PointLight) self);
 
 EXTERN_POSTFIX

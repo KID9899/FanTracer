@@ -9,7 +9,7 @@ void IShape_destroy(ccls(IShape) self) {
     delete _tocpp(IShape, self);
 }
 
-bool IShape_intersect(const ccls(IShape) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit) {
+bool IShape_intersect(const ccls(IShape) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit) {
     HitRecord h;
     bool res = _tocppc(IShape, self)->intersect(_tocppci(Ray, ray), t_min, t_max, h);
     *hit = _rvtoc(HitRecord, h);

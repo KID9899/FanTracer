@@ -7,13 +7,13 @@
 #include "orientedbox.h"
 #include "tracer/geometry.h"
 
-OrientedBox::OrientedBox(const Vector3d& c, const Vector3d& size, const Float3& rot, const IMaterial* m)
+OrientedBox::OrientedBox(const Vector3d &c, const Vector3d &size, const Float3 &rot, const IMaterial *m) noexcept
         : center(c), half_size(size / 2.f),
               rotation(eulerRotate       (rot.x, rot.y, rot.z)),
           inv_rotation(eulerRotateInverse(rot.x, rot.y, rot.z)),
           mat(m) {}
 
-bool OrientedBox::intersect(const Ray& ray, float t_min, float t_max, HitRecord& hit) const {
+bool OrientedBox::intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const noexcept {
     Vector3d local_o = inv_rotation^(ray.origin - center);
     Vector3d local_d = (inv_rotation^ray.direction).normalize();
 
@@ -55,7 +55,7 @@ bool OrientedBox::intersect(const Ray& ray, float t_min, float t_max, HitRecord&
 }
 
 // TODO - переделать на актуальные методы
-AABB OrientedBox::getBoundingBox() const {
+AABB OrientedBox::getBoundingBox() const noexcept {
 //    Vector3d corners[8] = {
 //            {-half_size.getX(), -half_size.getY(), -half_size.getZ()},
 //            { half_size.getX(), -half_size.getY(), -half_size.getZ()},
@@ -70,7 +70,7 @@ AABB OrientedBox::getBoundingBox() const {
 //    Vector3d min(1e9f, 1e9f, 1e9f);
 //    Vector3d max(-1e9f, -1e9f, -1e9f);
 //
-//    for (auto& c : corners) {
+//    for (auto &c : corners) {
 //        Vector3d world_c = center + eulerRotate(c, rotation.x, rotation.y, rotation.z);
 //        min = Vector3d(std::min(min.getX(), world_c.getX()), std::min(min.getY(), world_c.getY()), std::min(min.getZ(), world_c.getZ()));
 //        max = Vector3d(std::max(max.getX(), world_c.getX()), std::max(max.getY(), world_c.getY()), std::max(max.getZ(), world_c.getZ()));

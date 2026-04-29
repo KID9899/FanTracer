@@ -19,7 +19,7 @@ const ccls(SkyLight) const_ILight2SkyLight(const ccls(ILight) obj);
 
 ccls(SkyLight) SkyLight_make(const ccls(Vector3d) intensity);
 void SkyLight_destroy(ccls(SkyLight) self);
-ccls(Vector3d) SkyLight_illuminate(const ccls(SkyLight) self, const ccls(HitRecord) hit, ccls(Vector3d)* light_dir, float* distance);
+ccls(Vector3d) SkyLight_illuminate(const ccls(SkyLight) self, const ccls(HitRecord) hit, ccls(Vector3d) *light_dir, float *distance);
 ccls(Vector3d) SkyLight_samplePoint(const ccls(SkyLight) self);
 
 EXTERN_POSTFIX

@@ -19,7 +19,7 @@ const ccls(Lambertian) const_IMaterial2Lambertian(const ccls(IMaterial) obj);
 
 ccls(Lambertian) Lambertian_make(const ccls(Vector3d) color);
 void Lambertian_destroy(ccls(Lambertian) self);
-bool Lambertian_scatter(const ccls(Lambertian) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d)* absorption_attenuation, ccls(Vector3d)* distortion_attenuation, ccls(Ray)* scattered);
+bool Lambertian_scatter(const ccls(Lambertian) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d) *absorption_attenuation, ccls(Vector3d) *distortion_attenuation, ccls(Ray) *scattered);
 ccls(Vector3d) Lambertian_emitted(const ccls(Lambertian) self, const ccls(HitRecord) hit);
 
 EXTERN_POSTFIX

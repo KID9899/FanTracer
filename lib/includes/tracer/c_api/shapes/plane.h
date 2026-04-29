@@ -19,7 +19,7 @@ const ccls(Plane) const_IShape2Plane(const ccls(IShape) obj);
 
 ccls(Plane) Plane_make(const ccls(Vector3d) point, const ccls(Vector3d) normal, const ccls(IMaterial) material);
 void Plane_destroy(ccls(Plane) self);
-bool Plane_intersect(const ccls(Plane) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit);
+bool Plane_intersect(const ccls(Plane) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit);
 ccls(AABB) Plane_getBoundingBox(const ccls(Plane) self);
 
 EXTERN_POSTFIX

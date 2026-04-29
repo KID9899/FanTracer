@@ -19,7 +19,7 @@ const ccls(Cylinder) const_IShape2Cylinder(const ccls(IShape) obj);
 
 ccls(Cylinder) Cylinder_make(const ccls(Vector3d) center, float radius, float height, const ccls(Float3) rot, const ccls(IMaterial) material);
 void Cylinder_destroy(ccls(Cylinder) self);
-bool Cylinder_intersect(const ccls(Cylinder) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit);
+bool Cylinder_intersect(const ccls(Cylinder) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit);
 ccls(AABB) Cylinder_getBoundingBox(const ccls(Cylinder) self);
 
 EXTERN_POSTFIX

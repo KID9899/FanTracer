@@ -18,51 +18,50 @@ private:
     // a20 | a21 | a22
     // ---------------
     __m128 col0, col1, col2;
-    explicit Matrix3d(__m128 col0, __m128 col1, __m128 col2);
+    inline explicit Matrix3d(__m128 col0, __m128 col1, __m128 col2) noexcept;
 public:
-    AllowCopyDecl(Matrix3d);
-    AllowMoveDecl(Matrix3d);
-    DestructorDecl(Matrix3d);
+    AllowCopy(Matrix3d);
+    AllowMove(Matrix3d);
 
     // Дефолтный конструктор нуль-матрицы
-    Matrix3d();
+    inline Matrix3d() noexcept;
     // Сборка матрицы из столбцов и строк
-    static Matrix3d concatCols(Float3 col0, Float3 col1, Float3 col2);
-    static Matrix3d concatRows(Float3 row0, Float3 row1, Float3 row2);
+    inline static Matrix3d concatCols(const Float3 &col0, const Float3 &col1, const Float3 &col2) noexcept;
+    inline static Matrix3d concatRows(const Float3 &row0, const Float3 &row1, const Float3 &row2) noexcept;
     // Математические матрицы
-    static Matrix3d eye();
-    static Matrix3d diag(float x);
-    static Matrix3d fill(float x);
+    inline static Matrix3d eye() noexcept;
+    inline static Matrix3d diag(float x) noexcept;
+    inline static Matrix3d fill(float x) noexcept;
     // Максимально "сырой" конструктор
     // Его использование извне нежелательно, но возможно
     // для различных вычислительных функций
-    static Matrix3d unsafeCreateFromXMM(__m128 col0, __m128 col1, __m128 col2);
+    inline static Matrix3d unsafeCreateFromXMM(__m128 col0, __m128 col1, __m128 col2) noexcept;
 
     // Простые операторы
-    Matrix3d& operator+=(const Matrix3d& other);
-    Matrix3d& operator-=(const Matrix3d& other);
-    Matrix3d& operator*=(const Matrix3d& other);
-    Matrix3d& operator/=(const Matrix3d& other);
+    inline Matrix3d &operator+=(const Matrix3d &other) noexcept;
+    inline Matrix3d &operator-=(const Matrix3d &other) noexcept;
+    inline Matrix3d &operator*=(const Matrix3d &other) noexcept;
+    inline Matrix3d &operator/=(const Matrix3d &other) noexcept;
 
     // Домножение на скаляр
-    Matrix3d& operator*=(float other);
-    Matrix3d& operator/=(float other);
+    inline Matrix3d &operator*=(float other) noexcept;
+    inline Matrix3d &operator/=(float other) noexcept;
 
     // Домножение на вектор
-    Vector3d apply(const Vector3d& v) const;
+    inline Vector3d apply(const Vector3d &v) const noexcept;
 };
 
-Vector3d operator^(const Matrix3d& m, const Vector3d& v) noexcept;
+inline Vector3d operator^(const Matrix3d &m, const Vector3d &v) noexcept;
 
-DefaultBinOpDecl(Matrix3d, +);
-DefaultBinOpDecl(Matrix3d, -);
-DefaultBinOpDecl(Matrix3d, *);
-DefaultBinOpDecl(Matrix3d, /);
+inline DefaultBinOpDecl(Matrix3d, +);
+inline DefaultBinOpDecl(Matrix3d, -);
+inline DefaultBinOpDecl(Matrix3d, *);
+inline DefaultBinOpDecl(Matrix3d, /);
 
 LeftBinOpDecl(Matrix3d, float, *);
 LeftBinOpDecl(Matrix3d, float, /);
 
-CommutativeOpDecl(Matrix3d, Matrix3d, float, *);
+CommutativeOpDecl(Matrix3d, const Matrix3d&, float, *);
 
 // Короткие названия для удобства
 namespace tracer_short_names {

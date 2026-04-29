@@ -21,9 +21,9 @@ public:
     //   absorption_attenuation - прямое поглощение (поглощение луча, отражённого в камеру)
     //   distortion_attenuation - поглощение искажённого луча (затцхание при отражении, просвете и так далее)
     //   scattered - луч, получившийся после "столкновения" луча in с материалом
-    virtual bool scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_attenuation, Vector3d& distortion_attenuation, Ray& scattered) const = 0;
+    virtual bool scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept = 0;
     // Выводит неизменяемую составляющую цвета (свечение) в точке hit-а
-    virtual const Vector3d emitted(const HitRecord& hit) const {
+    virtual const Vector3d emitted(const HitRecord &hit) const noexcept {
         return Vector3d(0, 0, 0);
     }
 };

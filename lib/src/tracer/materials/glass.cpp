@@ -6,10 +6,10 @@
 #include "glass.h"
 #include "tracer/geometry.h"
 
-Glass::Glass(const Vector3d &color, float ri, float refl, float tint)
+Glass::Glass(const Vector3d &color, float ri, float refl, float tint) noexcept
         : color(color), refraction_index(ri), reflection_coeff(refl), tint_coeff(tint) {}
 
-bool Glass::scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_attenuation, Vector3d& distortion_attenuation, Ray& scattered) const {
+bool Glass::scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept {
     Vector3d unit_direction = in.direction.normalize();
     Vector3d reflected = reflect(unit_direction, hit.normal);
 

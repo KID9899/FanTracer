@@ -29,7 +29,7 @@ void Cylinder_destroy(ccls(Cylinder) self) {
     delete _tocpp(Cylinder, self);
 }
 
-bool Cylinder_intersect(const ccls(Cylinder) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit) {
+bool Cylinder_intersect(const ccls(Cylinder) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit) {
     return IShape_intersect(const_Cylinder2IShape(self), ray, t_min, t_max, hit);
 }
 ccls(AABB) Cylinder_getBoundingBox(const ccls(Cylinder) self) {

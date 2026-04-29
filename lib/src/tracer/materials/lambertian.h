@@ -14,9 +14,9 @@ class Lambertian : public IMaterial {
     // Цвет материала
     const Vector3d color;
 public:
-    Lambertian(const Vector3d& color);
+    Lambertian(const Vector3d &color) noexcept;
 
-    bool scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_attenuation, Vector3d& distortion_attenuation, Ray& scattered) const override;
+    bool scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept override;
 };
 
 #endif // TRACER_MATERIALS_LAMBERTIAN_H

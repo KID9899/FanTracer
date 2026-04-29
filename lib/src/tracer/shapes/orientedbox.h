@@ -12,19 +12,19 @@
 // Простой кубик
 class OrientedBox : public IShape {
     // Центр
-    Vector3d center;
+    const Vector3d center;
     // Вектор половин длинн рёбер
-    Vector3d half_size;
+    const Vector3d half_size;
     // Матрицы поворота
-    Matrix3d rotation;
-    Matrix3d inv_rotation;
+    const Matrix3d rotation;
+    const Matrix3d inv_rotation;
     // Материал
-    const IMaterial* mat;
+    const IMaterial *const mat;
 public:
-    OrientedBox(const Vector3d& c, const Vector3d& size, const Float3& rot, const IMaterial* m);
+    OrientedBox(const Vector3d &c, const Vector3d &size, const Float3 &rot, const IMaterial *m) noexcept;
 
-    bool intersect(const Ray& ray, float t_min, float t_max, HitRecord& hit) const override;
-    AABB getBoundingBox() const override;
+    bool intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const noexcept override;
+    AABB getBoundingBox() const noexcept override;
 };
 
 #endif // TRACER_SHAPES_ORIENTEDBOX_H

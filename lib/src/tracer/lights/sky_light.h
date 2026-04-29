@@ -15,9 +15,9 @@ class SkyLight : public ILight {
     // Интенсивность в RGB
     const Vector3d intensity;
 public:
-    SkyLight(const Vector3d& intensity);
-    const Vector3d illuminate(const HitRecord& hit, Vector3d& light_dir, float& distance) const override;
-    const Vector3d samplePoint() const override;
+    SkyLight(const Vector3d &intensity) noexcept;
+    const Vector3d illuminate(const HitRecord &hit, Vector3d &light_dir, float &distance) const noexcept override;
+    const Vector3d samplePoint() const noexcept override;
 };
 
 

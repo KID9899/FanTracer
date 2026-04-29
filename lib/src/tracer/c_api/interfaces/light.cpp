@@ -9,7 +9,7 @@ void ILight_destroy(ccls(ILight) self) {
     delete _tocpp(ILight, self);
 }
 
-ccls(Vector3d) ILight_illuminate(const ccls(ILight) self, const ccls(HitRecord) hit, ccls(Vector3d)* light_dir, float* distance) {
+ccls(Vector3d) ILight_illuminate(const ccls(ILight) self, const ccls(HitRecord) hit, ccls(Vector3d) *light_dir, float *distance) {
     Vector3d dir;
     float dist;
     Vector3d intensity = _tocppc(ILight, self)->illuminate(_tocppci(HitRecord, hit), dir, dist);

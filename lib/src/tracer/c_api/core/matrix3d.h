@@ -13,8 +13,8 @@ EXTERN_PREFIX
 make_capi(Matrix3d);
 
 ccls(Matrix3d) Matrix3d_empty();
-ccls(Matrix3d) Matrix3d_concatCols(ccls(Float3) col0, ccls(Float3) col1, ccls(Float3) col2);
-ccls(Matrix3d) Matrix3d_concatRows(ccls(Float3) row0, ccls(Float3) row1, ccls(Float3) row2);
+ccls(Matrix3d) Matrix3d_concatCols(const ccls(Float3) col0, const ccls(Float3) col1, const ccls(Float3) col2);
+ccls(Matrix3d) Matrix3d_concatRows(const ccls(Float3) row0, const ccls(Float3) row1, const ccls(Float3) row2);
 ccls(Matrix3d) Matrix3d_eye();
 ccls(Matrix3d) Matrix3d_diag(float x);
 ccls(Matrix3d) Matrix3d_fill(float x);

@@ -29,7 +29,7 @@ void SkyLight_destroy(ccls(SkyLight) self) {
     delete _tocpp(SkyLight, self);
 }
 
-ccls(Vector3d) SkyLight_illuminate(const ccls(SkyLight) self, const ccls(HitRecord) hit, ccls(Vector3d)* light_dir, float* distance) {
+ccls(Vector3d) SkyLight_illuminate(const ccls(SkyLight) self, const ccls(HitRecord) hit, ccls(Vector3d) *light_dir, float *distance) {
     return ILight_illuminate(const_SkyLight2ILight(self), hit, light_dir, distance);
 }
 ccls(Vector3d) SkyLight_samplePoint(const ccls(SkyLight) self) {

@@ -6,13 +6,13 @@
 #include "cylinder.h"
 #include "tracer/geometry.h"
 
-Cylinder::Cylinder(const Vector3d& c, float r, float h, const Float3& rot, const IMaterial* m)
+Cylinder::Cylinder(const Vector3d &c, float r, float h, const Float3 &rot, const IMaterial *m) noexcept
         : center(c), radius(r), height(h),
               rotation(eulerRotate       (rot.x, rot.y, rot.z)),
           inv_rotation(eulerRotateInverse(rot.x, rot.y, rot.z)),
           mat(m) {}
 
-bool Cylinder::intersect(const Ray& ray, float t_min, float t_max, HitRecord& hit) const {
+bool Cylinder::intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const noexcept {
     // Переводим луч в относительный координаты (центр цилиндра в начале координат, цидиндр строго вертикально)
     Vector3d local_o = inv_rotation^(ray.origin - center);
     Vector3d local_d = (inv_rotation^ray.direction).normalize();
@@ -49,7 +49,7 @@ bool Cylinder::intersect(const Ray& ray, float t_min, float t_max, HitRecord& hi
     if (!check_wall(t1)) check_wall(t2);
 
     // Функция для проверки пересечения с стенкой
-    auto check_cap = [&](float z_cap, const Vector3d& n_cap) {
+    auto check_cap = [&](float z_cap, const Vector3d &n_cap) {
         float d_z = local_d.getZ();
         float o_z = local_o.getZ();
         if (std::abs(d_z) < 1e-8f) return false;
@@ -81,10 +81,9 @@ bool Cylinder::intersect(const Ray& ray, float t_min, float t_max, HitRecord& hi
     return true;
 }
 
-AABB Cylinder::getBoundingBox() const {
+AABB Cylinder::getBoundingBox() const noexcept {
     const float r = radius;
     const float h = height;
-    Vector3d half(Vector3d(r, r, h/2.0f));
-    Vector3d c_local(0, 0, h/2.0f);
+    Vector3d half(r, r, h/2.0f);
     return {center - half, center + half};
 }

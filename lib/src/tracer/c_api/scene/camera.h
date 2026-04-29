@@ -17,7 +17,7 @@ ccls(Camera) Camera_make(const ccls(Vector3d) origin, const ccls(Vector3d) view,
 void Camera_destroy(ccls(Camera) self);
 
 ccls(Ray) Camera_getRay(const ccls(Camera) self, float u, float v);
-bool Camera_render(const ccls(Camera) self, const ccls(Scene) scene, int width, int height, const char* filename, int samples_per_pixel, bool debug);
+bool Camera_render(const ccls(Camera) self, const ccls(Scene) scene, int width, int height, const char *filename, int samples_per_pixel, bool debug);
 
 EXTERN_POSTFIX
 #endif // CAPI_TRACER_SCENE_CAMERA_H

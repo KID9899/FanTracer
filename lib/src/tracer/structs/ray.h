@@ -16,7 +16,9 @@ struct Ray {
     Vector3d direction;
 
     // Точка на расстоянии t от начала по направлению луча
-    const Vector3d at(float t) const;
+    inline const Vector3d at(float t) const noexcept {
+        return origin + t * direction;
+    }
 };
 
 #endif // TRACER_GEOMETRY_RAY_H

@@ -29,7 +29,7 @@ void Plane_destroy(ccls(Plane) self) {
     delete _tocpp(Plane, self);
 }
 
-bool Plane_intersect(const ccls(Plane) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord)* hit) {
+bool Plane_intersect(const ccls(Plane) self, const ccls(Ray) ray, float t_min, float t_max, ccls(HitRecord) *hit) {
     return IShape_intersect(const_Plane2IShape(self), ray, t_min, t_max, hit);
 }
 ccls(AABB) Plane_getBoundingBox(const ccls(Plane) self) {

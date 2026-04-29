@@ -12,16 +12,16 @@
 // Классическая бесконечная плоскость
 class Plane : public IShape {
     // Одна из точек плоскости
-    Vector3d point;
+    const Vector3d point;
     // Нормаль к этой плоскости
-    Vector3d normal;
+    const Vector3d normal;
     // Материал плоскости
-    const IMaterial* mat;
+    const IMaterial *const mat;
 public:
-    Plane(const Vector3d& p, const Vector3d& n, const IMaterial* m);
+    Plane(const Vector3d &p, const Vector3d &n, const IMaterial *m) noexcept;
 
-    bool intersect(const Ray& ray, float t_min, float t_max, HitRecord& hit) const override;
-    AABB getBoundingBox() const override;
+    bool intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const noexcept override;
+    AABB getBoundingBox() const noexcept override;
 };
 
 #endif // TRACER_SHAPES_PLANE_H

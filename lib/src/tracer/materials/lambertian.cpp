@@ -5,9 +5,9 @@
 #include "lambertian.h"
 #include "tracer/geometry.h"
 
-Lambertian::Lambertian(const Vector3d &color): color(color) {}
+Lambertian::Lambertian(const Vector3d &color) noexcept: color(color) {}
 
-bool Lambertian::scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_attenuation, Vector3d& distortion_attenuation, Ray& scattered) const {
+bool Lambertian::scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept {
     // Матовое размытие
     scattered = {hit.point, hit.normal + randomInUnitSphere()};
     absorption_attenuation = color;

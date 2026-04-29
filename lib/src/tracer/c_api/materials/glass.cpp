@@ -29,7 +29,7 @@ void Glass_destroy(ccls(Glass) self) {
     delete _tocpp(Glass, self);
 }
 
-bool Glass_scatter(const ccls(Glass) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d)* absorption_attenuation, ccls(Vector3d)* distortion_attenuation, ccls(Ray)* scattered) {
+bool Glass_scatter(const ccls(Glass) self, const ccls(Ray) in, const ccls(HitRecord) hit, ccls(Vector3d) *absorption_attenuation, ccls(Vector3d) *distortion_attenuation, ccls(Ray) *scattered) {
     return IMaterial_scatter(const_Glass2IMaterial(self), in, hit, absorption_attenuation, distortion_attenuation, scattered);
 }
 ccls(Vector3d) Glass_emitted(const ccls(Glass) self, const ccls(HitRecord) hit) {
