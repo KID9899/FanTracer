@@ -3,7 +3,8 @@
 //
 
 #include "tracer/interfaces.h"
-#include "tracer/geometry.h"
+#include "tracer/core.h"
+#include "tracer/structs.h"
 
 #ifndef TRACER_MATERIALS_MIRROR_H
 #define TRACER_MATERIALS_MIRROR_H
@@ -11,13 +12,13 @@
 // Классическое абсолютное зеркало
 class Mirror : public IMaterial {
     // Коэффциент отражения по трём цветам
-    Vector3d albedo;
+    const Vector3d albedo;
     // Размытие при отражении
-    float fuzz;
+    const float fuzz;
 public:
-    Mirror(const Vector3d& albedo, float fuzz);
+    Mirror(const Vector3d &albedo, float fuzz) noexcept;
 
-    bool scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_attenuation, Vector3d& distortion_attenuation, Ray& scattered) const override;
+    bool scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept override;
 };
 
 

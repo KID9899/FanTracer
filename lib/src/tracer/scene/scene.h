@@ -3,9 +3,9 @@
 //
 
 #include <vector>
-#include <memory>
 #include "tracer/interfaces.h"
-#include "tracer/geometry.h"
+#include "tracer/core.h"
+#include "tracer/structs.h"
 
 #ifndef TRACER_SCENE_SCENE_H
 #define TRACER_SCENE_SCENE_H
@@ -13,16 +13,16 @@
 // TODO - написать документацию
 class Scene {
 private:
-    std::vector<std::shared_ptr<IShape>> shapes;
-    std::vector<std::shared_ptr<ILight>> lights;
+    std::vector<const IShape*> shapes;
+    std::vector<const ILight*> lights;
 public:
-    const std::vector<std::shared_ptr<IShape>> &getShapes() const;
-    const std::vector<std::shared_ptr<ILight>> &getLights() const;
+    const std::vector<const IShape*> &getShapes() const noexcept;
+    const std::vector<const ILight*> &getLights() const noexcept;
 
-    void add(std::shared_ptr<IShape> shape);
-    void add(std::shared_ptr<ILight> light);
+    void add(const IShape* shape) noexcept;
+    void add(const ILight* light) noexcept;
 
-    bool intersect(const Ray& ray, float t_min, float t_max, HitRecord& rec) const;
+    bool intersect(const Ray &ray, float t_min, float t_max, HitRecord &hit) const noexcept;
 };
 
 

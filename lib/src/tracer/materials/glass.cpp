@@ -2,15 +2,16 @@
 // Created by iliya on 4/19/26.
 //
 
-#include "glass.h"
 #include <cmath>
+#include "glass.h"
+#include "tracer/geometry.h"
 
-Glass::Glass(const Vector3d &color, float ri, float refl, float tint)
+Glass::Glass(const Vector3d &color, float ri, float refl, float tint) noexcept
         : color(color), refraction_index(ri), reflection_coeff(refl), tint_coeff(tint) {}
 
-bool Glass::scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_attenuation, Vector3d& distortion_attenuation, Ray& scattered) const {
+bool Glass::scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept {
     Vector3d unit_direction = in.direction.normalize();
-    Vector3d reflected = unit_direction.reflect(hit.normal);
+    Vector3d reflected = reflect(unit_direction, hit.normal);
 
     // TODO - переделать формулы на чистовой вариант
     Vector3d white(1.0f, 1.0f, 1.0f);
@@ -21,7 +22,7 @@ bool Glass::scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_at
     // TODO - перейти на параметры hit-а
     Vector3d outward_normal;
     float ni_over_nt;
-    if (unit_direction * hit.normal > 0.0f) {
+    if ((unit_direction ^ hit.normal) > 0.0f) {
         outward_normal = -hit.normal;
         ni_over_nt = refraction_index;
     } else {
@@ -30,7 +31,7 @@ bool Glass::scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_at
     }
 
     // Проверка на полное внутреннее отражение
-    float dt = unit_direction * outward_normal;
+    float dt = unit_direction ^ outward_normal;
     float discriminant = 1.0f - ni_over_nt * ni_over_nt * (1.0f - dt * dt);
 
     if (discriminant <= 0.0f) {
