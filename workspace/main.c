@@ -32,6 +32,6 @@ int main() {
     // Камера
     ccls(Camera) cam = Camera_make(Vector3d_make(2.f, 1.f, 20.f), Vector3d_make(0.f, 0.f, -1.0f), .5f, .5f, 0.f);
 
-    Camera_render(cam, scene, 300, 300, "output.ppm", 100, true);
+    Camera_render(cam, scene, 512, 512, "output.ppm", 300, true);
     return 0;
 }

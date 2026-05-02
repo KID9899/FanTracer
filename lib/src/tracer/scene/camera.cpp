@@ -42,7 +42,9 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
     if (!ppm) return false;
     ppm << "P3\n" << width << " " << height << "\n255\n";
 
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
+    // Размер чанка до 4096 пикселей
+    constexpr int TARGET_CHUNK_PIXELS = 65536;
+    int chunk_rows = std::max(1, TARGET_CHUNK_PIXELS / width);
 
     // lambda-функция для трассировки лучей, возвращает итоговый RGB-цвет по лучу ray
     // depth - максимальная глубина рекурсии
@@ -96,47 +98,51 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
         return color;
     };
 
-    Vector3d pixels[width*height];
+    for (int start_row = 0; start_row < height; start_row += chunk_rows) {
+        int rows_this_chunk = std::min(chunk_rows, height - start_row);
+        int current_chunk_pixels = rows_this_chunk * width;
 
-    // Параллельная обработка пикселей
-    #pragma omp parallel for schedule(dynamic) collapse(2)
-    for (int j = 0; j < height; ++j) {
-        // Локальный для потока генератор случайных чисел
-        thread_local std::mt19937 gen(std::random_device{}());
-        std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+        std::vector<Vector3d> chunk_pixels(current_chunk_pixels);
 
-        for (int i = 0; i < width; ++i) {
+        // Параллельное вычисление пикселей чанка
+        #pragma omp parallel for schedule(dynamic)
+        for (int idx = 0; idx < current_chunk_pixels; ++idx) {
+            auto &rng = threadRNG();
+            std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+
+            // Глобальные координаты
+            int row = start_row + idx / width;
+            int col = idx % width;
+
+            // Инвертируем row
+            int j = height - 1 - row;
+
             Vector3d pixel_color(0.0f, 0.0f, 0.0f);
+
             for (int s = 0; s < samples_per_pixel; ++s) {
-                float u = (static_cast<float>(i) + dist(gen)) / (width - 1);
-                float v = (static_cast<float>(j) + dist(gen)) / (height - 1);
+                float u = (static_cast<float>(col) + dist(rng)) / (width  - 1);
+                float v = (static_cast<float>(j)   + dist(rng)) / (height - 1);
                 Ray ray = getRay(u, v);
                 pixel_color += trace(ray, 50);
             }
             pixel_color /= static_cast<float>(samples_per_pixel);
-            // Сохраняем в буфер (индекс с учётом переворота по вертикали,
-            // т.к. в исходном коде цикл шёл от height-1 до 0,
-            // здесь j идёт от 0, поэтому для правильного порядка в файле
-            // инвертируем j: строки снизу вверх.
-            int row = height - 1 - j;
-            pixels[row * width + i] = pixel_color;
+            chunk_pixels[idx] = pixel_color;
         }
-    }
 
-    // Отладочный вывод теперь не нужен внутри цикла, можно вывести один раз
-    if (debug) std::cout << "Рендеринг завершён.\n";
-
-    // Последовательная запись файла
-    for (int row = 0; row < height; ++row) {
-        for (int col = 0; col < width; ++col) {
-            const Vector3d &pc = pixels[row * width + col];
+        // Последовательная запись чанка в файл
+        for (int idx = 0; idx < current_chunk_pixels; ++idx) {
+            const Vector3d &pc = chunk_pixels[idx];
             int ir = static_cast<int>(255.99f * pc.getX());
             int ig = static_cast<int>(255.99f * pc.getY());
             int ib = static_cast<int>(255.99f * pc.getZ());
             ppm << ir << " " << ig << " " << ib << "\n";
         }
+
+        if (debug) {
+            std::cerr << "\rОтрисованы строки " << start_row << "-" << (start_row + rows_this_chunk - 1) << " из " << height;
+        }
     }
 
-    return true;
+    if (debug) std::cerr << "\rОтрисовано " << height << "строк\nРендеринг завершён.\n";
     return true;
 }

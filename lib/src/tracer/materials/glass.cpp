@@ -39,9 +39,7 @@ bool Glass::scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_at
         return true;
     }
 
-    // TODO - перейти на нормальный random
-    Vector3d r = randomInUnitSphere();
-    float rand_val = (r.getX() + 1.0f) / 2.0f;
+    float rand_val = random01();
 
     // На рандомчик выбираем отражать или преломлять
     if (rand_val < reflection_coeff) {
