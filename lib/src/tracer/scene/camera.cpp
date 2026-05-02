@@ -143,6 +143,6 @@ bool Camera::render(const Scene &scene, int width, int height, const std::string
         }
     }
 
-    if (debug) std::cerr << "\rОтрисовано " << height << "строк\nРендеринг завершён.\n";
+    if (debug) std::cerr << "\rОтрисовано " << height << " строк\nРендеринг завершён.\n";
     return true;
 }

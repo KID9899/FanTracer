@@ -54,26 +54,25 @@ bool OrientedBox::intersect(const Ray &ray, float t_min, float t_max, HitRecord 
     return true;
 }
 
-// TODO - переделать на актуальные методы
 AABB OrientedBox::getBoundingBox() const noexcept {
-//    Vector3d corners[8] = {
-//            {-half_size.getX(), -half_size.getY(), -half_size.getZ()},
-//            { half_size.getX(), -half_size.getY(), -half_size.getZ()},
-//            {-half_size.getX(),  half_size.getY(), -half_size.getZ()},
-//            { half_size.getX(),  half_size.getY(), -half_size.getZ()},
-//            {-half_size.getX(), -half_size.getY(),  half_size.getZ()},
-//            { half_size.getX(), -half_size.getY(),  half_size.getZ()},
-//            {-half_size.getX(),  half_size.getY(),  half_size.getZ()},
-//            { half_size.getX(),  half_size.getY(),  half_size.getZ()}
-//    };
-//
-//    Vector3d min(1e9f, 1e9f, 1e9f);
-//    Vector3d max(-1e9f, -1e9f, -1e9f);
-//
-//    for (auto &c : corners) {
-//        Vector3d world_c = center + eulerRotate(c, rotation.x, rotation.y, rotation.z);
-//        min = Vector3d(std::min(min.getX(), world_c.getX()), std::min(min.getY(), world_c.getY()), std::min(min.getZ(), world_c.getZ()));
-//        max = Vector3d(std::max(max.getX(), world_c.getX()), std::max(max.getY(), world_c.getY()), std::max(max.getZ(), world_c.getZ()));
-//    }
-    return {{0.f, 0.f, 0.f}, {0.f, 0.f, 0.f}};
+    Vector3d corners[8] = {
+            {-half_size.getX(), -half_size.getY(), -half_size.getZ()},
+            { half_size.getX(), -half_size.getY(), -half_size.getZ()},
+            {-half_size.getX(),  half_size.getY(), -half_size.getZ()},
+            { half_size.getX(),  half_size.getY(), -half_size.getZ()},
+            {-half_size.getX(), -half_size.getY(),  half_size.getZ()},
+            { half_size.getX(), -half_size.getY(),  half_size.getZ()},
+            {-half_size.getX(),  half_size.getY(),  half_size.getZ()},
+            { half_size.getX(),  half_size.getY(),  half_size.getZ()}
+    };
+
+    Vector3d min(1e9f, 1e9f, 1e9f);
+    Vector3d max(-1e9f, -1e9f, -1e9f);
+
+    for (auto &c : corners) {
+        Vector3d world_c = center + rotation.apply(c);
+        min = (min < world_c).combine(min, world_c);
+        max = (max > world_c).combine(max, world_c);
+    }
+    return {min, max};
 }

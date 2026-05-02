@@ -5,3 +5,4 @@
 #include "interfaces/light.h"
 #include "interfaces/material.h"
 #include "interfaces/shape.h"
+#include "interfaces/shape_group.h"

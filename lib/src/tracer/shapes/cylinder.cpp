@@ -82,8 +82,24 @@ bool Cylinder::intersect(const Ray &ray, float t_min, float t_max, HitRecord &hi
 }
 
 AABB Cylinder::getBoundingBox() const noexcept {
-    const float r = radius;
-    const float h = height;
-    Vector3d half(r, r, h/2.0f);
-    return {center - half, center + half};
+    Vector3d corners[8] = {
+            {-radius, -height/2.f, -radius},
+            { radius, -height/2.f, -radius},
+            {-radius,  height/2.f, -radius},
+            { radius,  height/2.f, -radius},
+            {-radius, -height/2.f,  radius},
+            { radius, -height/2.f,  radius},
+            {-radius,  height/2.f,  radius},
+            { radius,  height/2.f,  radius}
+    };
+
+    Vector3d min(1e9f, 1e9f, 1e9f);
+    Vector3d max(-1e9f, -1e9f, -1e9f);
+
+    for (auto &c : corners) {
+        Vector3d world_c = center + rotation.apply(c);
+        min = (min < world_c).combine(min, world_c);
+        max = (max > world_c).combine(max, world_c);
+    }
+    return {min, max};
 }
