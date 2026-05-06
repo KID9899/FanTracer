@@ -9,16 +9,16 @@
 #ifndef TRACER_MATERIALS_MIRROR_H
 #define TRACER_MATERIALS_MIRROR_H
 
-// Классическое абсолютное зеркало
 class Mirror : public IMaterial {
-    // Коэффциент отражения по трём цветам
-    const Vector3d albedo;
-    // Размытие при отражении
+    // Размытие в зеркале
     const float fuzz;
+    // 1 - коэффициент отражения по трём цветам
+    // Чем меньше коэффициент отражения (чем больше inv_albedo), тем сильнее проявляется текстура
+    const Vector3d inv_albedo;
 public:
-    Mirror(const Vector3d &albedo, float fuzz) noexcept;
-
-    bool scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept override;
+    inline Mirror(const ITexture* tex, float fuzz, const Vector3d& albedo) noexcept : IMaterial(tex), fuzz(fuzz), inv_albedo(Vector3d(1.f) - albedo) {}
+    bool scatter_ray(const Ray& in, const HitRecord& hit, Ray& scattered) const noexcept override;
+    void modify_attenuation(Vector3d& absorption, Vector3d& distortion) const noexcept override;
 };
 
 

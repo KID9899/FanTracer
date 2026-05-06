@@ -9,11 +9,11 @@
 #define TRACER_GEOMETRY_AABB_H
 
 // Простая структура для хранения AABB
-// TODO - улучшить, добавить поддержку во время рендеринга
 struct AABB {
     Vector3d min;
     Vector3d max;
 
+    // TODO - добавить в c_api
     inline bool hit(const Ray& ray, float t_min, float t_max) const noexcept {
         Vector3d invDir = Vector3d(1.0f) / ray.direction;
         Vector3d t0 = (min - ray.origin) * invDir;

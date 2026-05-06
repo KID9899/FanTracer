@@ -3,102 +3,131 @@
 //
 
 #include "tracer/geometry.h"
+#include "tracer/textures.h"
 #include "obj_model.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
-OBJModel::OBJModel(const std::string &file, const Vector3d& zero, const Float3 &rot, float scale): filename(file), scale(scale),
-        zero(zero), rotation(eulerRotate(rot.x, rot.y, rot.z)),
-        defaultMaterial(std::make_unique<Lambertian>(Vector3d(0.5f, 0.0f, 0.5f))) {}
+OBJModel::OBJModel(const std::string &file, const Vector3d& zero, const Float3 &rot, float scale)
+        : filename(file), scale(scale), zero(zero),
+          rotation(eulerRotate(rot.x, rot.y, rot.z)) {}
 
 void OBJModel::bindMaterial(const std::string &name, const IMaterial *mat) {
     materialBindings[name] = mat;
 }
 
 void OBJModel::load() {
-    // Собственно, открываем файлик
     std::ifstream in(filename);
     if (!in) {
         std::cerr << "OBJModel: cannot open " << filename << std::endl;
         return;
     }
 
-    // Список позиций точек
+    // Держим и позиции и текстурные координаты
     std::vector<Vector3d> positions;
+    std::vector<Float2> texCoords;
     std::string line;
-    const IMaterial *currentMaterial = defaultMaterial.get();
 
-    // Список индексов вершин наших треугольников
-    struct Triplet { int v1, v2, v3; };
-    std::vector<Triplet> faceTriplets;
+    ITexture *defaultTex = new PlainTexture(Float3{.5f, .0f, .5f});
+    IMaterial *defaultMaterial = new Lambertian(defaultTex);
+
+    const IMaterial *currentMaterial = defaultMaterial;
+
+    struct Triplet { int v, vt, vn; };
+    struct Face {Triplet a, b, c; const IMaterial* mat; };
+    std::vector<Face> faces;
 
     while (std::getline(in, line)) {
-
         if (line.empty() || line[0] == '#') continue;
         std::istringstream iss(line);
         std::string token;
         iss >> token;
+
         if (token == "v") {
             // В случае, если вводится новая точка
             float x, y, z;
             if (iss >> x >> y >> z)
                 positions.push_back(rotation.apply(Vector3d(x, y, z)) * scale + zero);
-        } else if (token == "f") {
-            // Если делается некоторая поверхность
-            std::vector<int> verts;
+        }
+        else if (token == "vt") {
+            float u, v;
+            if (iss >> u >> v)
+                texCoords.push_back({u, v});
+        }
+        else if (token == "f") {
+            // Если добавляется некоторая поверхность
+            std::vector<std::string> verts;
             std::string vtx;
-            while (iss >> vtx) {
-                std::istringstream vss(vtx);
-                std::string indexStr;
-                std::getline(vss, indexStr, '/');
-                int idx = std::stoi(indexStr);
-                if (idx > 0) verts.push_back(idx);
-                else std::cerr << "OBJModel: negative indices unsupported\n";
-            }
-            if (verts.size() == 3) {
-                // Это треугольник (кайф)
-                faceTriplets.push_back({verts[0], verts[1], verts[2]});
-            } else if (verts.size() == 4) {
-                // Триангуляция квадрата
-                faceTriplets.push_back({verts[0], verts[1], verts[2]});
-                faceTriplets.push_back({verts[0], verts[2], verts[3]});
+            while (iss >> vtx) verts.push_back(vtx);
+
+            if (verts.size() == 3 || verts.size() == 4) {
+                // Если у нас треугольник или четырёхугольник
+                auto parseVertex = [&](const std::string& str, Triplet& t) {
+                    std::istringstream vss(str);
+                    std::string part;
+                    std::getline(vss, part, '/'); t.v = std::stoi(part);
+                    std::getline(vss, part, '/'); t.vt = part.empty() ? 0 : std::stoi(part);
+                    std::getline(vss, part, '/'); t.vn = part.empty() ? 0 : std::stoi(part);
+                };
+
+                Triplet t1, t2, t3;
+                parseVertex(verts[0], t1);
+                parseVertex(verts[1], t2);
+                parseVertex(verts[2], t3);
+                faces.push_back({t1, t2, t3, currentMaterial});
+
+                if (verts.size() == 4) {
+                    Triplet t4;
+                    parseVertex(verts[3], t4);
+                    faces.push_back({t1, t3, t4, currentMaterial});
+                }
             } else {
-                // TODO - сделать универсальный триангулятор
-                // С чем-то сложнее пока не работаем
+                // Другие игнорируем
                 std::cerr << "OBJModel: face with " << verts.size() << " verts skipped\n";
             }
-        } else if (token == "usemtl") {
-            // Работаем с материалами
+        }
+        else if (token == "usemtl") {
+            // Меняем материал
             std::string mtlName;
             if (iss >> mtlName) {
                 auto it = materialBindings.find(mtlName);
-                currentMaterial = (it != materialBindings.end()) ? it->second : defaultMaterial.get();
+                currentMaterial = (it != materialBindings.end()) ? it->second : defaultMaterial;
             }
         }
     }
+    // Создаём треугольники из индексов вершин
+    for (const auto &i: faces) {
+        const Triplet &a = i.a;
+        const Triplet &b = i.b;
+        const Triplet &c = i.c;
 
-    // Создаём треугольники
-    for (const auto &ft : faceTriplets) {
-        if (
-                ft.v1 < 1
-             || ft.v1 > (int)positions.size()
-             || ft.v2 < 1
-             || ft.v2 > (int)positions.size()
-             || ft.v3 < 1 ||
-             ft.v3 > (int)positions.size()
-        ) {
+        if (a.v < 1 || a.v > (int)positions.size() ||
+                                  b.v < 1 || b.v > (int)positions.size() ||
+                                                        c.v < 1 || c.v > (int)positions.size()) {
             std::cerr << "OBJModel: invalid vertex index, skipping face\n";
             continue;
         }
-        triangles.emplace_back(positions[ft.v1-1], positions[ft.v2-1], positions[ft.v3-1], currentMaterial);
+
+        bool hasUV = (a.vt > 0 && b.vt > 0 && c.vt > 0) &&
+                     (a.vt <= (int)texCoords.size() &&
+                      b.vt <= (int)texCoords.size() &&
+                      c.vt <= (int)texCoords.size());
+
+        if (hasUV) {
+            triangles.emplace_back(
+                    positions[a.v-1], positions[b.v-1], positions[c.v-1],
+                    texCoords[a.vt-1], texCoords[b.vt-1], texCoords[c.vt-1],
+                    i.mat);
+        } else {
+            triangles.emplace_back(
+                    positions[a.v-1], positions[b.v-1], positions[c.v-1],
+                    i.mat);
+        }
     }
 
-    // Заполняем shapes указателями на наши треугольнички
     shapes.clear();
     shapes.reserve(triangles.size());
-    for (const auto& tri : triangles) {
-        shapes.push_back(&tri);
-    }
+    for (const auto& tri : triangles) shapes.push_back(&tri);
     buildBVH();
 }

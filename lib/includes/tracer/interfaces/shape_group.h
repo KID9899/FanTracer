@@ -10,6 +10,7 @@
 #include "shape.h"
 #include "tracer/structs.h"
 
+// TODO - сделать c_api
 class IShapesGroup : public IShape {
     struct BVHNode {
         AABB box;

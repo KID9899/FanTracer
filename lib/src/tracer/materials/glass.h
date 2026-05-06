@@ -12,8 +12,6 @@
 // Продвинутый материал с комбинированными свойствами отражения
 // просвечивания с преломлением и прямого поглощения (цвета)
 class Glass : public IMaterial {
-    // Цвет материала
-    const Vector3d color;
     // Коэффициент преломления (прямой), например 1.52 для стекла
     const float refraction_index;
     // От 0 до 1. Чем выше - тем больше доля отражаемых лучей над преломляемыми
@@ -27,12 +25,13 @@ class Glass : public IMaterial {
     // tint = 0, refl = 1 -> абсолютное зеркало
     // tint = 0.6, refl = 1 -> полированный непрозрачный драгоценный камень
     // tint = 0.6, refl = 0.5 -> яркое цветное стекло (например, бутылочное, или яркие драгоценные камни)
-    // tine = 0.2, refl = 0.2 -> обычное стекло с незначительным оттенком (бледные драгоценные камни)
+    // tint = 0.2, refl = 0.2 -> обычное стекло с незначительным оттенком (бледные драгоценные камни)
     // Последний вариант очень хорошо подходит для высоких коэффициентов преломления
 public:
-    Glass(const Vector3d &color, float ri, float refl, float tint) noexcept;
-
-    bool scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept override;
+    Glass(const ITexture* tex, float ri, float refl, float tint) noexcept;
+    bool scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption_attenuation, Vector3d& distortion_attenuation, Ray& scattered) const noexcept override;
+protected:
+    bool scatter_ray(const Ray& in, const HitRecord& hit, Ray& scattered) const noexcept override { return true; };
 };
 
 #endif // TRACER_MATERIALS_GLASS_H

@@ -5,3 +5,4 @@
 #include "structs/aabb.h"
 #include "structs/hit_record.h"
 #include "structs/ray.h"
+#include "structs/float2.h"

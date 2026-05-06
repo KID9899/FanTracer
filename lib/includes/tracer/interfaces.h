@@ -6,3 +6,4 @@
 #include "interfaces/material.h"
 #include "interfaces/shape.h"
 #include "interfaces/shape_group.h"
+#include "interfaces/texture.h"

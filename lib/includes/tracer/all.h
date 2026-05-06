@@ -11,3 +11,4 @@
 #include "lights.h"
 #include "materials.h"
 #include "shapes.h"
+#include "textures.h"

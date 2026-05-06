@@ -6,20 +6,24 @@
 #include "glass.h"
 #include "tracer/geometry.h"
 
-Glass::Glass(const Vector3d &color, float ri, float refl, float tint) noexcept
-        : color(color), refraction_index(ri), reflection_coeff(refl), tint_coeff(tint) {}
+Glass::Glass(const ITexture* tex, float ri, float refl, float tint) noexcept
+        : IMaterial(tex), refraction_index(ri), reflection_coeff(refl), tint_coeff(tint) {}
 
-bool Glass::scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_attenuation, Vector3d &distortion_attenuation, Ray &scattered) const noexcept {
+// Полностью переопределяем scatter
+bool Glass::scatter(const Ray& in, const HitRecord& hit, Vector3d& absorption, Vector3d& distortion, Ray& scattered) const noexcept {
     Vector3d unit_direction = in.direction.normalize();
     Vector3d reflected = reflect(unit_direction, hit.normal);
 
-    // TODO - переделать формулы на чистовой вариант
-    Vector3d white(1.0f, 1.0f, 1.0f);
-    absorption_attenuation = Vector3d(0.0f, 0.0f, 0.0f);
-    distortion_attenuation = white * (1.0f - tint_coeff) + color * tint_coeff;
+    // Получаем цвет из текстуры
+    Vector3d texAbsorption, texDistortion;
+    texture->get_attenuation(hit.u, hit.v, texAbsorption, texDistortion);
 
-    // Параметры для преломления луча и поиск подходящей нормали
-    // TODO - перейти на параметры hit-а
+    // Рассчитываем поглощения из коэффициентов
+    Vector3d white(1.0f, 1.0f, 1.0f);
+    absorption = Vector3d(0.f, 0.f, 0.f);
+    distortion = white * (1.0f - tint_coeff) + texDistortion * tint_coeff;
+
+    // Ищем преломление и отражение
     Vector3d outward_normal;
     float ni_over_nt;
     if ((unit_direction ^ hit.normal) > 0.0f) {
@@ -30,24 +34,22 @@ bool Glass::scatter(const Ray &in, const HitRecord &hit, Vector3d &absorption_at
         ni_over_nt = 1.0f / refraction_index;
     }
 
-    // Проверка на полное внутреннее отражение
     float dt = unit_direction ^ outward_normal;
     float discriminant = 1.0f - ni_over_nt * ni_over_nt * (1.0f - dt * dt);
 
+    // Если наблюдается полное внутреннее отражение
     if (discriminant <= 0.0f) {
         scattered = {hit.point, reflected};
         return true;
     }
 
+    // Выбираем отразить или преломить
     float rand_val = random01();
-
-    // На рандомчик выбираем отражать или преломлять
     if (rand_val < reflection_coeff) {
         scattered = {hit.point, reflected};
     } else {
         Vector3d refracted = ni_over_nt * (unit_direction - outward_normal * dt) - outward_normal * std::sqrt(discriminant);
         scattered = {hit.point, refracted};
     }
-
     return true;
 }

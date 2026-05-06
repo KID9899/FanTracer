@@ -8,7 +8,6 @@
 #define TRACER_GEOMETRY_RAY_H
 
 // Простая структура луча
-// TODO - Добавить механику пакетов для SIMD
 struct Ray {
     // Начало
     Vector3d origin;

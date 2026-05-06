@@ -10,8 +10,6 @@
 class IMaterial;
 
 // Структура, содержащая информацию об пересечении луча и тела
-// TODO - добавить поддержку текстур
-// TODO - добавить механику пакетов для SIMD
 struct HitRecord {
     // Расстояние от начала луча до точки пересечения
     float t;
@@ -23,6 +21,9 @@ struct HitRecord {
     const IMaterial* material;
     // Вошёл ли луч в объект (true) или вышел (false)
     bool frontFace;
+    // Координаты в текстуре
+    float u = 0.f;
+    float v = 0.f;
 };
 
 #endif // TRACER_GEOMETRY_HIT_RECORD_H

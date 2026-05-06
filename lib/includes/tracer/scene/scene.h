@@ -10,6 +10,7 @@
 #ifndef TRACER_SCENE_SCENE_H
 #define TRACER_SCENE_SCENE_H
 
+// TODO - обновить c_api
 class Scene: public IShapesGroup {
 private:
     std::vector<const ILight*> lights;
